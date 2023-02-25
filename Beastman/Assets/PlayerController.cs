@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Camera _camera;
     [SerializeField] private float _speed = 2f;
+    [SerializeField] private Animator _animator;
 
     private void Start()
     {
@@ -45,8 +46,10 @@ public class PlayerController : MonoBehaviour
     {
         if (_movementVertical == 0f && _movementHorizontal == 0f)
         {
+            _animator.SetBool("IsWalking", false);
             return;
         }
+        _animator.SetBool("IsWalking", true);
 
         Vector3 verticalVector = _camera.transform.forward * _movementVertical;
         Vector3 verticalVectorFlat = new Vector3(verticalVector.x, 0f, verticalVector.z);
