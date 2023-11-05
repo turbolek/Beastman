@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private GameInput _gameInput;
-    private float _movementHorizontal;
-    private float _movementVertical;
-
     [SerializeField] private Camera _camera;
     [SerializeField] private float _speed = 2f;
     [SerializeField] private Animator _animator;
+
+    [SerializeField] private float hitSphereRadius = .5f;
+    [SerializeField] private float hitSphereRange = .5f;
+
+    private GameInput _gameInput;
+    private float _movementHorizontal;
+    private float _movementVertical;
+    private bool _isAttacking = false;
+
 
     private void Start()
     {
@@ -49,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (_movementVertical == 0f && _movementHorizontal == 0f)
+        if (_movementVertical == 0f && _movementHorizontal == 0f || _isAttacking)
         {
             _animator.SetBool("IsWalking", false);
             return;
@@ -75,6 +80,25 @@ public class PlayerController : MonoBehaviour
     private void Punch()
     {
         _animator.SetTrigger("Punch");
+        _isAttacking = true;
+    }
+
+    public void Hit()
+    {
+        var hits = Physics.SphereCastAll(transform.position, hitSphereRadius, transform.forward, hitSphereRange);
+        foreach (var hit in hits)
+        {
+            Hittable hittable = hit.transform.GetComponent<Hittable>();
+            if (hittable != null)
+            {
+                hittable.Hit(gameObject);
+            }
+        }
+    }
+
+    public void OnPunchEnd()
+    {
+        _isAttacking = false;
     }
 
 }
