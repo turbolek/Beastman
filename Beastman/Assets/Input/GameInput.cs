@@ -44,6 +44,15 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Punch"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7361729-e709-42dc-a83a-77e720275191"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""action"": ""WalkHorizontal"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73878cd5-9df0-4770-b0e4-c8d5a2f4a173"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Punch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         m_PlayerControls = asset.FindActionMap("PlayerControls", throwIfNotFound: true);
         m_PlayerControls_WalkVertical = m_PlayerControls.FindAction("WalkVertical", throwIfNotFound: true);
         m_PlayerControls_WalkHorizontal = m_PlayerControls.FindAction("WalkHorizontal", throwIfNotFound: true);
+        m_PlayerControls_Punch = m_PlayerControls.FindAction("Punch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,12 +204,14 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     private IPlayerControlsActions m_PlayerControlsActionsCallbackInterface;
     private readonly InputAction m_PlayerControls_WalkVertical;
     private readonly InputAction m_PlayerControls_WalkHorizontal;
+    private readonly InputAction m_PlayerControls_Punch;
     public struct PlayerControlsActions
     {
         private @GameInput m_Wrapper;
         public PlayerControlsActions(@GameInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @WalkVertical => m_Wrapper.m_PlayerControls_WalkVertical;
         public InputAction @WalkHorizontal => m_Wrapper.m_PlayerControls_WalkHorizontal;
+        public InputAction @Punch => m_Wrapper.m_PlayerControls_Punch;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -204,6 +227,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @WalkHorizontal.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnWalkHorizontal;
                 @WalkHorizontal.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnWalkHorizontal;
                 @WalkHorizontal.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnWalkHorizontal;
+                @Punch.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPunch;
+                @Punch.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPunch;
+                @Punch.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPunch;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -214,6 +240,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @WalkHorizontal.started += instance.OnWalkHorizontal;
                 @WalkHorizontal.performed += instance.OnWalkHorizontal;
                 @WalkHorizontal.canceled += instance.OnWalkHorizontal;
+                @Punch.started += instance.OnPunch;
+                @Punch.performed += instance.OnPunch;
+                @Punch.canceled += instance.OnPunch;
             }
         }
     }
@@ -222,5 +251,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     {
         void OnWalkVertical(InputAction.CallbackContext context);
         void OnWalkHorizontal(InputAction.CallbackContext context);
+        void OnPunch(InputAction.CallbackContext context);
     }
 }

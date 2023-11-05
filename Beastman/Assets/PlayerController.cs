@@ -35,6 +35,11 @@ public class PlayerController : MonoBehaviour
         {
             _movementVertical = 0f;
         };
+
+        _gameInput.PlayerControls.Punch.performed += ctx =>
+        {
+            Punch();
+        };
     }
 
     private void Update()
@@ -65,6 +70,11 @@ public class PlayerController : MonoBehaviour
 
         transform.Translate(movementDirection * _speed * Time.deltaTime, Space.World);
 
+    }
+
+    private void Punch()
+    {
+        _animator.SetTrigger("Punch");
     }
 
 }
