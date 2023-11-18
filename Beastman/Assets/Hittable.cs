@@ -4,9 +4,53 @@ using UnityEngine;
 
 public class Hittable : MonoBehaviour
 {
+    [SerializeField] private float _hitPoints = 100f;
+    [SerializeField] private Color _damageColor;
+    [SerializeField] private float _damageFXTime = .5f;
 
-    public void Hit(GameObject hitter)
+    private MeshRenderer _meshRenderer;
+    private Color _initialColor;
+    private Coroutine _fxCoroutine;
+
+    private void Start()
+    {
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _initialColor = _meshRenderer.material.color;
+    }
+
+    public void Hit(GameObject hitter, float damage)
+    {
+        TakeDamage(damage);
+    }
+
+    private void TakeDamage(float damage)
+    {
+        if (_fxCoroutine != null)
+        {
+            StopCoroutine(_fxCoroutine);
+        }
+
+        _fxCoroutine = StartCoroutine(TakeDamageCoroutine());
+        _hitPoints -= damage;
+
+        if (_hitPoints <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
     {
         Destroy(gameObject);
     }
+
+    private IEnumerator TakeDamageCoroutine()
+    {
+        _meshRenderer.material.color = _damageColor;
+
+        yield return new WaitForSeconds(_damageFXTime);
+
+        _meshRenderer.material.color = _initialColor;
+    }
+
 }

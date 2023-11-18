@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private float _speed = 2f;
     [SerializeField] private Animator _animator;
+    [SerializeField] private float _damage = 35f;
 
     [SerializeField] private float hitSphereRadius = .5f;
     [SerializeField] private float hitSphereRange = .5f;
@@ -91,7 +92,7 @@ public class PlayerController : MonoBehaviour
             Hittable hittable = hit.transform.GetComponent<Hittable>();
             if (hittable != null)
             {
-                hittable.Hit(gameObject);
+                hittable.Hit(gameObject, _damage);
             }
         }
     }
