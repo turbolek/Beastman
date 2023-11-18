@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hittable : MonoBehaviour
 {
-    [SerializeField] private float _hitPoints = 100f;
+    [field: SerializeField] public float HitPoints = 100f;
     [SerializeField] private Color _damageColor;
     [SerializeField] private float _damageFXTime = .5f;
     [SerializeField] private Renderer _renderer;
@@ -30,9 +30,9 @@ public class Hittable : MonoBehaviour
         }
 
         _fxCoroutine = StartCoroutine(TakeDamageCoroutine());
-        _hitPoints -= damage;
+        HitPoints -= damage;
 
-        if (_hitPoints <= 0)
+        if (HitPoints <= 0)
         {
             Die();
         }
