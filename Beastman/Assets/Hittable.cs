@@ -7,15 +7,14 @@ public class Hittable : MonoBehaviour
     [SerializeField] private float _hitPoints = 100f;
     [SerializeField] private Color _damageColor;
     [SerializeField] private float _damageFXTime = .5f;
+    [SerializeField] private Renderer _renderer;
 
-    private MeshRenderer _meshRenderer;
     private Color _initialColor;
     private Coroutine _fxCoroutine;
 
     private void Start()
     {
-        _meshRenderer = GetComponent<MeshRenderer>();
-        _initialColor = _meshRenderer.material.color;
+        _initialColor = _renderer.material.color;
     }
 
     public void Hit(GameObject hitter, float damage)
@@ -46,11 +45,11 @@ public class Hittable : MonoBehaviour
 
     private IEnumerator TakeDamageCoroutine()
     {
-        _meshRenderer.material.color = _damageColor;
+        _renderer.material.color = _damageColor;
 
         yield return new WaitForSeconds(_damageFXTime);
 
-        _meshRenderer.material.color = _initialColor;
+        _renderer.material.color = _initialColor;
     }
 
 }

@@ -7,10 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private float _speed = 2f;
     [SerializeField] private Animator _animator;
-    [SerializeField] private float _damage = 35f;
-
-    [SerializeField] private float hitSphereRadius = .5f;
-    [SerializeField] private float hitSphereRange = .5f;
+    [SerializeField] private Hitter _hitter;
 
     private GameInput _gameInput;
     private float _movementHorizontal;
@@ -50,7 +47,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        HandleMovement();
+        if (!_isAttacking)
+        {
+            HandleMovement();
+        }
     }
 
     private void HandleMovement()
@@ -78,23 +78,15 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void HitRequest()
+    {
+        _hitter.Hit();
+    }
+
     private void Punch()
     {
         _animator.SetTrigger("Punch");
         _isAttacking = true;
-    }
-
-    public void Hit()
-    {
-        var hits = Physics.SphereCastAll(transform.position, hitSphereRadius, transform.forward, hitSphereRange);
-        foreach (var hit in hits)
-        {
-            Hittable hittable = hit.transform.GetComponent<Hittable>();
-            if (hittable != null)
-            {
-                hittable.Hit(gameObject, _damage);
-            }
-        }
     }
 
     public void OnPunchEnd()
